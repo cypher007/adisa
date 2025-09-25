@@ -31,65 +31,53 @@ export const AppRoutes = () => {
           </Authenticated>
         }
       >
-        <Route
-          index
-          element={<NavigateToResource resource="profile_audits" />}
-        />
-        <Route path="/profile_audits">
-           {/* Assuming AntdInferencer is the intended list view here based on structure */}
-          <Route index element={<AntdInferencer />} />
-          <Route path="create" element={<AntdInferencer />} />
-          <Route path="edit/:id" element={<AntdInferencer />} />
-          <Route path="show/:id" element={<AntdInferencer />} />
-        </Route>
+        <Route index element={<NavigateToResource resource="profiles" />} />
+
+        {/* Profiles routes */}
         <Route path="/profiles">
-          {/* Assuming AntdInferencer is the intended list view here */}
           <Route index element={<AntdInferencer />} />
           <Route path="create" element={<AntdInferencer />} />
           <Route path="edit/:id" element={<AntdInferencer />} />
           <Route path="show/:id" element={<AntdInferencer />} />
         </Route>
-         <Route path="/audits">
-           {/* Assuming AntdInferencer is the intended list view here */}
+
+        {/* Profile Audits routes */}
+        <Route path="/profile_audits">
           <Route index element={<AntdInferencer />} />
           <Route path="create" element={<AntdInferencer />} />
           <Route path="edit/:id" element={<AntdInferencer />} />
           <Route path="show/:id" element={<AntdInferencer />} />
         </Route>
-         <Route path="/questions">
-           {/* Assuming AntdInferencer is the intended list view here */}
+
+        {/* Audits routes */}
+        <Route path="/audits">
           <Route index element={<AntdInferencer />} />
           <Route path="create" element={<AntdInferencer />} />
           <Route path="edit/:id" element={<AntdInferencer />} />
           <Route path="show/:id" element={<AntdInferencer />} />
         </Route>
+
+        {/* Questions routes */}
+        <Route path="/questions">
+          <Route index element={<AntdInferencer />} />
+          <Route path="create" element={<AntdInferencer />} />
+          <Route path="edit/:id" element={<AntdInferencer />} />
+          <Route path="show/:id" element={<AntdInferencer />} />
+        </Route>
+
         <Route path="*" element={<ErrorComponent />} />
       </Route>
+
       <Route
         element={
-          <Authenticated
-            key="authenticated-outer"
-            fallback={<Outlet />}
-          >
-            {/* Redirect to resource if already authenticated */}
+          <Authenticated key="authenticated-outer" fallback={<Outlet />}>
             <NavigateToResource />
           </Authenticated>
         }
       >
-        <Route
-          path="/login"
-          element={
-            <AuthPage type="login" />
-          }
-        />
-        <Route
-          path="/register"
-          element={<AuthPage type="register" />}
-        />
-        <Route
-          path="/forgot-password"
-          element={<AuthPage type="forgotPassword" />}
-        />
+        <Route path="/login" element={<AuthPage type="login" />} />
+        <Route path="/register" element={<AuthPage type="register" />} />
+        <Route path="/forgot-password" element={<AuthPage type="forgotPassword" />} />
       </Route>
     </Routes>
   );
