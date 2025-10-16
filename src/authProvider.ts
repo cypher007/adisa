@@ -7,6 +7,18 @@ const authProvider: AuthBindings = {
       success: false,
     };
   },
+  register: async () => {
+    window.location.href = "/api/register";
+    return {
+      success: false,
+    };
+  },
+  forgotPassword: async () => {
+    window.location.href = "/api/forgot-password";
+    return {
+      success: false,
+    };
+  },
   logout: async () => {
     window.location.href = "/api/logout";
     return {

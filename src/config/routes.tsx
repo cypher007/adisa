@@ -12,6 +12,8 @@ import {
 import { Outlet, Route, Routes } from "react-router";
 import { Header } from "../components/header";
 import { LoginPage } from "../pages/login";
+import { RegisterPage } from "../pages/register";
+import { ForgotPasswordPage } from "../pages/forgot-password";
 
 export const AppRoutes = () => {
   return (
@@ -76,6 +78,8 @@ export const AppRoutes = () => {
         }
       >
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       </Route>
     </Routes>
   );

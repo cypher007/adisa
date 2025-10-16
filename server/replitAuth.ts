@@ -104,14 +104,43 @@ export async function setupAuth(app: Express) {
   passport.serializeUser((user: Express.User, cb) => cb(null, user));
   passport.deserializeUser((user: Express.User, cb) => cb(null, user));
 
+  // Standard login flow
   app.get("/api/login", (req, res, next) => {
     const strategyName = `replitauth:${primaryDomain}`;
     passport.authenticate(strategyName, {
-      prompt: "login consent",
+      prompt: "login",
       scope: ["openid", "email", "profile", "offline_access"],
     })(req, res, next);
   });
 
+  // OpenID login flow (explicit consent)
+  app.get("/api/login/openid", (req, res, next) => {
+    const strategyName = `replitauth:${primaryDomain}`;
+    passport.authenticate(strategyName, {
+      prompt: "consent",
+      scope: ["openid", "email", "profile", "offline_access"],
+    })(req, res, next);
+  });
+
+  // Registration flow
+  app.get("/api/register", (req, res, next) => {
+    const strategyName = `replitauth:${primaryDomain}`;
+    passport.authenticate(strategyName, {
+      prompt: "select_account",
+      scope: ["openid", "email", "profile", "offline_access"],
+    })(req, res, next);
+  });
+
+  // Forgot password flow (redirects to Replit Auth)
+  app.get("/api/forgot-password", (req, res, next) => {
+    const strategyName = `replitauth:${primaryDomain}`;
+    passport.authenticate(strategyName, {
+      prompt: "login",
+      scope: ["openid", "email", "profile", "offline_access"],
+    })(req, res, next);
+  });
+
+  // OAuth callback handler
   app.get("/api/callback", (req, res, next) => {
     const strategyName = `replitauth:${primaryDomain}`;
     passport.authenticate(strategyName, (err: any, user: any, info: any) => {
@@ -133,6 +162,7 @@ export async function setupAuth(app: Express) {
     })(req, res, next);
   });
 
+  // Logout flow
   app.get("/api/logout", (req, res) => {
     req.logout(() => {
       res.redirect(
