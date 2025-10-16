@@ -2,9 +2,8 @@ import { AuthBindings } from "@refinedev/core";
 
 const authProvider: AuthBindings = {
   login: async () => {
-    window.location.href = "/api/login";
     return {
-      success: false,
+      success: true,
     };
   },
   logout: async () => {

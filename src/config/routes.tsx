@@ -1,7 +1,6 @@
 import { Authenticated } from "@refinedev/core";
 import { AntdInferencer } from "@refinedev/inferencer/antd";
 import {
-  AuthPage,
   ErrorComponent,
   ThemedLayoutV2,
   ThemedSiderV2,
@@ -12,6 +11,7 @@ import {
 } from "@refinedev/react-router";
 import { Outlet, Route, Routes } from "react-router";
 import { Header } from "../components/header";
+import { LoginPage } from "../pages/login";
 
 export const AppRoutes = () => {
   return (
@@ -75,9 +75,7 @@ export const AppRoutes = () => {
           </Authenticated>
         }
       >
-        <Route path="/login" element={<AuthPage type="login" />} />
-        <Route path="/register" element={<AuthPage type="register" />} />
-        <Route path="/forgot-password" element={<AuthPage type="forgotPassword" />} />
+        <Route path="/login" element={<LoginPage />} />
       </Route>
     </Routes>
   );
