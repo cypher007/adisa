@@ -4,32 +4,45 @@ import { supabaseClient } from "./utility";
 
 const authProvider: AuthBindings = {
   login: async ({ email, password }) => {
-    const { data, error } = await supabaseClient.auth.signInWithPassword({
-      email,
-      password,
-    });
+    try {
+      const { data, error } = await supabaseClient.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-    if (error) {
+      if (error) {
+        return {
+          success: false,
+          error: {
+            message: error.message,
+            name: "Login Error",
+          },
+        };
+      }
+
+      if (data?.user) {
+        return {
+          success: true,
+          redirectTo: "/",
+        };
+      }
+
       return {
         success: false,
-        error,
+        error: {
+          message: "Login failed",
+          name: "Invalid email or password",
+        },
       };
-    }
-
-    if (data?.user) {
+    } catch (err) {
       return {
-        success: true,
-        redirectTo: "/",
+        success: false,
+        error: {
+          message: "An unexpected error occurred",
+          name: "Login Error",
+        },
       };
     }
-
-    return {
-      success: false,
-      error: {
-        message: "Login failed",
-        name: "Invalid email or password",
-      },
-    };
   },
   logout: async () => {
     const { error } = await supabaseClient.auth.signOut();
@@ -56,38 +69,76 @@ const authProvider: AuthBindings = {
     return { error };
   },
   check: async () => {
-    const { data } = await supabaseClient.auth.getUser();
-    const { user } = data;
+    try {
+      const { data, error } = await supabaseClient.auth.getSession();
 
-    if (user) {
+      if (error) {
+        return {
+          authenticated: false,
+          error: {
+            message: "Session check failed",
+            name: error.message,
+          },
+          logout: true,
+          redirectTo: "/login",
+        };
+      }
+
+      const { session } = data;
+
+      if (session) {
+        return {
+          authenticated: true,
+        };
+      }
+
       return {
-        authenticated: true,
+        authenticated: false,
+        error: {
+          message: "Not authenticated",
+          name: "No active session",
+        },
+        logout: true,
+        redirectTo: "/login",
+      };
+    } catch (err) {
+      return {
+        authenticated: false,
+        error: {
+          message: "Authentication check failed",
+          name: "Unexpected error",
+        },
+        logout: true,
+        redirectTo: "/login",
       };
     }
-
-    return {
-      authenticated: false,
-      error: {
-        message: "Check failed",
-        name: "Token not found",
-      },
-      logout: true,
-      redirectTo: "/login",
-    };
   },
   getPermissions: async () => null,
   getIdentity: async () => {
-    const { data } = await supabaseClient.auth.getUser();
-    const { user } = data;
+    try {
+      const { data, error } = await supabaseClient.auth.getUser();
+      
+      if (error) {
+        console.error("Error fetching user identity:", error);
+        return null;
+      }
 
-    if (user) {
-      return {
-        ...user,
-        name: user.email,
-      };
+      const { user } = data;
+
+      if (user) {
+        return {
+          id: user.id,
+          name: user.email || "User",
+          email: user.email,
+          avatar: user.user_metadata?.avatar_url,
+        };
+      }
+
+      return null;
+    } catch (err) {
+      console.error("Unexpected error in getIdentity:", err);
+      return null;
     }
-
-    return null;
   },
 };
 
