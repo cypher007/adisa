@@ -1,109 +1,23 @@
-
 import { AuthBindings } from "@refinedev/core";
-import { supabaseClient } from "./utility";
 
 const authProvider: AuthBindings = {
-  register: async ({ email, password }) => {
-    try {
-      const { data, error } = await supabaseClient.auth.signUp({
-        email,
-        password,
-      });
-
-      if (error) {
-        return {
-          success: false,
-          error: {
-            message: error.message,
-            name: "Registration Error",
-          },
-        };
-      }
-
-      if (data?.user) {
-        return {
-          success: true,
-          redirectTo: "/",
-        };
-      }
-
-      return {
-        success: false,
-        error: {
-          message: "Registration failed",
-          name: "Unable to create account",
-        },
-      };
-    } catch (err) {
-      return {
-        success: false,
-        error: {
-          message: "An unexpected error occurred",
-          name: "Registration Error",
-        },
-      };
-    }
-  },
-  login: async ({ email, password }) => {
-    try {
-      const { data, error } = await supabaseClient.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (error) {
-        return {
-          success: false,
-          error: {
-            message: error.message,
-            name: "Login Error",
-          },
-        };
-      }
-
-      if (data?.user) {
-        return {
-          success: true,
-          redirectTo: "/",
-        };
-      }
-
-      return {
-        success: false,
-        error: {
-          message: "Login failed",
-          name: "Invalid email or password",
-        },
-      };
-    } catch (err) {
-      return {
-        success: false,
-        error: {
-          message: "An unexpected error occurred",
-          name: "Login Error",
-        },
-      };
-    }
+  login: async () => {
+    window.location.href = "/api/login";
+    return {
+      success: false,
+    };
   },
   logout: async () => {
-    const { error } = await supabaseClient.auth.signOut();
-
-    if (error) {
-      return {
-        success: false,
-        error,
-      };
-    }
-
+    window.location.href = "/api/logout";
     return {
       success: true,
-      redirectTo: "/login",
     };
   },
   onError: async (error) => {
     if (error.status === 401) {
       return {
         logout: true,
+        redirectTo: "/api/login",
       };
     }
 
@@ -111,23 +25,11 @@ const authProvider: AuthBindings = {
   },
   check: async () => {
     try {
-      const { data, error } = await supabaseClient.auth.getSession();
+      const response = await fetch("/api/auth/check", {
+        credentials: "include",
+      });
 
-      if (error) {
-        return {
-          authenticated: false,
-          error: {
-            message: "Session check failed",
-            name: error.message,
-          },
-          logout: true,
-          redirectTo: "/login",
-        };
-      }
-
-      const { session } = data;
-
-      if (session) {
+      if (response.ok) {
         return {
           authenticated: true,
         };
@@ -135,43 +37,36 @@ const authProvider: AuthBindings = {
 
       return {
         authenticated: false,
-        error: {
-          message: "Not authenticated",
-          name: "No active session",
-        },
-        logout: true,
-        redirectTo: "/login",
+        redirectTo: "/api/login",
       };
     } catch (err) {
       return {
         authenticated: false,
-        error: {
-          message: "Authentication check failed",
-          name: "Unexpected error",
-        },
-        logout: true,
-        redirectTo: "/login",
+        redirectTo: "/api/login",
       };
     }
   },
   getPermissions: async () => null,
   getIdentity: async () => {
     try {
-      const { data, error } = await supabaseClient.auth.getUser();
-      
-      if (error) {
-        console.error("Error fetching user identity:", error);
+      const response = await fetch("/api/auth/user", {
+        credentials: "include",
+      });
+
+      if (!response.ok) {
         return null;
       }
 
-      const { user } = data;
+      const user = await response.json();
 
       if (user) {
         return {
           id: user.id,
-          name: user.email || "User",
+          name: user.firstName && user.lastName 
+            ? `${user.firstName} ${user.lastName}` 
+            : user.email || "User",
           email: user.email,
-          avatar: user.user_metadata?.avatar_url,
+          avatar: user.profileImageUrl,
         };
       }
 
