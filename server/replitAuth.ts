@@ -76,13 +76,12 @@ export async function setupAuth(app: Express) {
 
   const verify: VerifyFunction = async (
     tokens: client.TokenEndpointResponse & client.TokenEndpointResponseHelpers,
-    userinfo: any,
-    done: passport.AuthenticateCallback
+    userinfo: any
   ) => {
     const user = {};
     updateUserSession(user, tokens);
     await upsertUser(tokens.claims());
-    done(null, user);
+    return user;
   };
 
   const domains = process.env.REPLIT_DOMAINS!.split(",");
