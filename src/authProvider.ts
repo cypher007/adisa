@@ -3,6 +3,47 @@ import { AuthBindings } from "@refinedev/core";
 import { supabaseClient } from "./utility";
 
 const authProvider: AuthBindings = {
+  register: async ({ email, password }) => {
+    try {
+      const { data, error } = await supabaseClient.auth.signUp({
+        email,
+        password,
+      });
+
+      if (error) {
+        return {
+          success: false,
+          error: {
+            message: error.message,
+            name: "Registration Error",
+          },
+        };
+      }
+
+      if (data?.user) {
+        return {
+          success: true,
+          redirectTo: "/",
+        };
+      }
+
+      return {
+        success: false,
+        error: {
+          message: "Registration failed",
+          name: "Unable to create account",
+        },
+      };
+    } catch (err) {
+      return {
+        success: false,
+        error: {
+          message: "An unexpected error occurred",
+          name: "Registration Error",
+        },
+      };
+    }
+  },
   login: async ({ email, password }) => {
     try {
       const { data, error } = await supabaseClient.auth.signInWithPassword({
