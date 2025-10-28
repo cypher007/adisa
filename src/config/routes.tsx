@@ -16,10 +16,22 @@ import { RegisterPage } from "../pages/register";
 import { ForgotPasswordPage } from "../pages/forgot-password";
 import { Verify2FAPage } from "../pages/verify-2fa";
 import { DashboardPage } from "../pages/dashboard";
+import { HomePage } from "../pages/home";
 
 export const AppRoutes = () => {
   return (
     <Routes>
+      {/* Public Home Page */}
+      <Route
+        index
+        element={
+          <Authenticated key="home" fallback={<HomePage />}>
+            <CatchAllNavigate to="/dashboard" />
+          </Authenticated>
+        }
+      />
+
+      {/* Authenticated Routes */}
       <Route
         element={
           <Authenticated
@@ -35,7 +47,7 @@ export const AppRoutes = () => {
           </Authenticated>
         }
       >
-        <Route index element={<DashboardPage />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
 
         {/* Profiles routes */}
         <Route path="/profiles">
@@ -72,10 +84,11 @@ export const AppRoutes = () => {
         <Route path="*" element={<ErrorComponent />} />
       </Route>
 
+      {/* Public Routes (Login, Register, etc.) */}
       <Route
         element={
           <Authenticated key="authenticated-outer" fallback={<Outlet />}>
-            <NavigateToResource />
+            <CatchAllNavigate to="/dashboard" />
           </Authenticated>
         }
       >
