@@ -1,16 +1,29 @@
-
 import { AuthBindings } from "@refinedev/core";
 
 const authProvider: AuthBindings = {
-  login: async ({ email, password }) => {
+  login: async ({ username, password }) => {
     try {
       const response = await fetch("/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: email, password }),
+        credentials: "include",
+        body: JSON.stringify({ username, password }),
       });
 
-      if (response.ok) {
+      const data = await response.json();
+
+      if (data.success) {
+        if (data.requires2FA) {
+          return {
+            success: false,
+            error: {
+              name: "2FARequired",
+              message: "Redirection vers vérification 2FA",
+            },
+            redirectTo: "/verify-2fa",
+          };
+        }
+
         return {
           success: true,
           redirectTo: "/",
@@ -21,7 +34,7 @@ const authProvider: AuthBindings = {
         success: false,
         error: {
           name: "LoginError",
-          message: "Invalid email or password",
+          message: data.message || "Identifiants invalides",
         },
       };
     } catch (error) {
@@ -29,14 +42,18 @@ const authProvider: AuthBindings = {
         success: false,
         error: {
           name: "LoginError",
-          message: "An error occurred during login",
+          message: "Une erreur est survenue lors de la connexion",
         },
       };
     }
   },
+
   logout: async () => {
     try {
-      await fetch("/api/logout", { method: "POST" });
+      await fetch("/api/logout", {
+        credentials: "include",
+      });
+
       return {
         success: true,
         redirectTo: "/login",
@@ -46,19 +63,24 @@ const authProvider: AuthBindings = {
         success: false,
         error: {
           name: "LogoutError",
-          message: "An error occurred during logout",
+          message: "Une erreur est survenue lors de la déconnexion",
         },
       };
     }
   },
+
   check: async () => {
     try {
-      const response = await fetch("/api/me");
+      const response = await fetch("/api/auth/check", {
+        credentials: "include",
+      });
+
       if (response.ok) {
         return {
           authenticated: true,
         };
       }
+
       return {
         authenticated: false,
         redirectTo: "/login",
@@ -70,21 +92,54 @@ const authProvider: AuthBindings = {
       };
     }
   },
-  getPermissions: async () => null,
-  getIdentity: async () => {
+
+  getPermissions: async () => {
     try {
-      const response = await fetch("/api/me");
+      const response = await fetch("/api/auth/user", {
+        credentials: "include",
+      });
+
       if (response.ok) {
         const user = await response.json();
-        return user;
+        return user.role;
       }
+
       return null;
     } catch (error) {
       return null;
     }
   },
+
+  getIdentity: async () => {
+    try {
+      const response = await fetch("/api/auth/user", {
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        const user = await response.json();
+        return {
+          id: user.id,
+          name: user.username,
+          email: user.email,
+          avatar: user.profileImageUrl,
+        };
+      }
+
+      return null;
+    } catch (error) {
+      return null;
+    }
+  },
+
   onError: async (error) => {
-    console.error(error);
+    if (error?.statusCode === 401) {
+      return {
+        logout: true,
+        redirectTo: "/login",
+      };
+    }
+
     return { error };
   },
 };
