@@ -22,6 +22,7 @@ export interface IStorage {
   markInvitationAsUsed(token: string): Promise<void>;
   getOrganizationByUserId(userId: string): Promise<Organization | undefined>;
   upsertOrganization(org: UpsertOrganization): Promise<Organization>;
+  getAllUsers(): Promise<User[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -76,7 +77,11 @@ export class DatabaseStorage implements IStorage {
       .update(invitations)
       .set({ used: true })
       .where(eq(invitations.token, token));
-  }
+  },
+
+  async getAllUsers(): Promise<User[]> {
+    return await db.select().from(users);
+  },
 
   async getOrganizationByUserId(userId: string): Promise<Organization | undefined> {
     const [org] = await db
@@ -88,7 +93,7 @@ export class DatabaseStorage implements IStorage {
 
   async upsertOrganization(orgData: UpsertOrganization): Promise<Organization> {
     const existing = await this.getOrganizationByUserId(orgData.userId);
-    
+
     if (existing) {
       const [updated] = await db
         .update(organizations)
