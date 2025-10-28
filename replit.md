@@ -1,7 +1,7 @@
 # AfricTivistes ADISA - Refine Admin Dashboard
 
 ## Overview
-This is a Refine-based admin dashboard application built with React, TypeScript, and Ant Design. It uses **Replit Auth** for authentication and **Supabase** for data operations.
+This is a Refine-based admin dashboard application built with React, TypeScript, and Ant Design. It uses a custom **invitation-only authentication system** with **mandatory 2FA** for all users. Administrators can invite users via email, and users must configure 2FA to complete their registration.
 
 ## Architecture
 - **Frontend**: React with Refine framework (Port 5000)
@@ -9,63 +9,69 @@ This is a Refine-based admin dashboard application built with React, TypeScript,
 - **UI Library**: Ant Design
 - **Build Tool**: Vite
 - **Language**: TypeScript
-- **Authentication**: Replit Auth (OpenID Connect)
+- **Authentication**: Custom invitation-based system with 2FA
 - **User Database**: PostgreSQL (Replit built-in)
 - **Data Backend**: Supabase
 - **Routing**: React Router
 
 ## Current Status
-✅ **Fully configured for Replit environment**
-- Replit Auth integrated with Express backend
-- PostgreSQL database for user sessions and profiles
-- Development workflow runs both servers concurrently
-- Vite configured to proxy API requests to auth backend
-- All environment variables configured automatically
+✅ **Backend Complètement Implémenté**
+- ✅ Système d'invitation uniquement par email
+- ✅ Authentification 2FA obligatoire (OTPAuth + Google Authenticator)
+- ✅ Compte administrateur créé
+- ✅ Envoi d'emails automatique (Replit Mail)
+- ✅ Gestion des organisations
+- ✅ Séparation stricte des rôles (admin/user)
+- ⏳ Frontend à compléter (voir IMPLEMENTATION_GUIDE.md)
 
-## Authentication Setup
+## Authentication System
 
-### Replit Auth (Already Configured ✓)
-The app uses Replit Auth for user authentication, which provides:
-- Login with Google, GitHub, X, Apple, and email/password
-- Automatic user management in the Auth pane
-- Secure session management with PostgreSQL
-- All required environment variables are pre-configured
+### Invitation-Only Access
+L'application utilise un système d'invitation uniquement. Les utilisateurs ne peuvent pas s'inscrire directement.
 
-**To customize the login page:**
-1. Go to the **Auth pane** in your Replit workspace
-2. Click **Configure**
-3. Customize app name, icon, and login methods
+**Workflow**:
+1. Admin invite un utilisateur par email
+2. Utilisateur reçoit un email avec lien d'invitation
+3. Utilisateur crée son compte (username/password)
+4. **2FA obligatoire**: Scan QR code avec Google Authenticator
+5. Vérification du code 2FA
+6. Accès au système
 
-### Available Authentication Routes
+### Admin Account (Déjà Créé ✓)
 
-The application provides multiple authentication endpoints:
+```
+Username: cheikhfall7
+Password: Nazim@2207
+Email: admin@adisa.local
+Role: admin
+```
 
-#### Login Routes
-- **`/api/login`** - Standard login (prompt: login)
-- **`/api/login/openid`** - OpenID login with explicit consent (prompt: consent)
-- **`/login`** - Frontend login page (auto-redirects to `/api/login`)
+L'admin peut:
+- Inviter des utilisateurs
+- Voir tous les comptes
+- Accéder à tous les audits
+- Gérer les organisations
 
-#### Registration Routes
-- **`/api/register`** - User registration (prompt: select_account)
-- **`/register`** - Frontend registration page (auto-redirects to `/api/register`)
+### API Routes
 
-#### Password Recovery Routes
-- **`/api/forgot-password`** - Password reset flow
-- **`/forgot-password`** - Frontend forgot password page (auto-redirects to `/api/forgot-password`)
+#### Public Routes
+- `POST /api/login` - Login username/password
+- `POST /api/register` - Register with invitation token
+- `GET /api/invitation/validate/:token` - Validate invitation token
 
-#### Other Routes
-- **`/api/logout`** - Sign out and clear session
-- **`/api/callback`** - OAuth callback handler (used internally)
-- **`/api/auth/check`** - Check if user is authenticated
-- **`/api/auth/user`** - Get current user profile
+#### Authenticated Routes
+- `GET /api/auth/check` - Check authentication status
+- `GET /api/auth/user` - Get current user profile
+- `GET /api/logout` - Logout
+- `POST /api/2fa/generate` - Generate 2FA secret
+- `POST /api/2fa/verify` - Verify and enable 2FA
+- `POST /api/2fa/authenticate` - Authenticate with 2FA code
+- `GET /api/organization` - Get user organization
+- `POST /api/organization` - Create/update organization
 
-### How It Works
-1. User authentication is handled by the Express backend (port 4000)
-2. User sessions are stored in PostgreSQL
-3. User profiles are stored in the database
-4. Frontend communicates with backend via `/api/auth/*` endpoints
-5. All auth routes use OpenID Connect with Replit Auth
-6. Different prompts control the authentication flow (login, consent, select_account)
+#### Admin Only Routes
+- `POST /api/admin/invite` - Send invitation email
+- `GET /api/admin/users` - List all users
 
 ## Data Operations (Supabase - Optional)
 
@@ -87,21 +93,35 @@ If you want to use Supabase for data operations, add these environment variables
 
 ## Features
 The application includes:
-- **Replit Auth**: Secure authentication with multiple providers
-  - Standard login flow
-  - OpenID Connect login with explicit consent
-  - User registration
-  - Password recovery
+- **Invitation System**: Only invited users can register
+  - Email invitations sent automatically
+  - Secure tokens (7-day expiration)
+  - One-time use tokens
+- **Two-Factor Authentication (2FA)**:
+  - Mandatory for all users
+  - Google Authenticator compatible
+  - QR code generation
+  - Time-based OTP (TOTP)
+- **Role-Based Access Control**:
+  - Admin: Full access, can invite users
+  - User: Limited to own data and audits
+- **Organization Management**:
+  - Users can configure organization details
+  - Sector, size, country information
+- **Email Notifications**:
+  - Invitation emails
+  - Account notifications (via Replit Mail)
 - User profile management
-- Blog posts management (CRUD)
-- Categories management (CRUD)
+- Audit trail management (CRUD)
+- Questions management (CRUD)
 - Responsive design with Ant Design
 - Session-based authentication with PostgreSQL
-- Enhanced login page with multiple authentication options
 
 ## Database Schema
 The app uses PostgreSQL with the following tables:
-- `users` - User profiles (id, email, firstName, lastName, profileImageUrl)
+- `users` - User profiles (id, username, email, password, role, 2FA fields, etc.)
+- `invitations` - Invitation tokens (email, token, used, expires_at)
+- `organizations` - Organization details (userId, name, sector, size, country)
 - `sessions` - User session storage for authentication
 
 ## Deployment
@@ -110,20 +130,27 @@ The project is configured for Replit deployment with:
 - Start command: `npm run start`
 - Target: Autoscale (suitable for web apps)
 
-## Recent Changes (October 16, 2025)
-- **Integrated Replit Auth** with Express backend using OpenID Connect
-- Added PostgreSQL database for users and sessions
-- Created custom Refine auth provider for Replit Auth
-- Set up concurrent development workflow
-- Configured Vite proxy for API requests
-- **Added multiple authentication routes**:
-  - Standard login (`/api/login`)
-  - OpenID login with consent (`/api/login/openid`)
-  - User registration (`/api/register`)
-  - Password recovery (`/api/forgot-password`)
-- Created frontend pages for login, register, and forgot password
-- Enhanced auth provider with register and forgotPassword methods
-- Fixed authentication strategy hostname matching issues
+## Recent Changes (October 28, 2025)
+
+### 🚀 Major System Overhaul - Invitation System
+
+- **Replaced Replit Auth** with custom invitation-only authentication
+- **Implemented 2FA** mandatory for all users using OTPAuth
+- **Created admin account**: cheikhfall7 (see credentials above)
+- **Integrated Replit Mail** for automatic invitation emails
+- **Database schema extended**:
+  - Added user roles (admin/user)
+  - Added invitation system tables
+  - Added 2FA secret storage
+  - Added organization management
+- **Backend APIs implemented**:
+  - Invitation system (generate, validate, register)
+  - 2FA (generate QR, verify, authenticate)
+  - Admin routes (invite users, list users)
+  - Organization management
+- **Email system**: Automatic invitation emails with branded templates
+- **Security**: bcrypt password hashing, secure sessions, 2FA tokens
+- **Documentation**: Complete implementation guide created (IMPLEMENTATION_GUIDE.md)
 
 ## Development Notes
 - The frontend runs on port 5000
