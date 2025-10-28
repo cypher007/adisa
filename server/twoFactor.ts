@@ -32,7 +32,7 @@ export function setupTwoFactorRoutes(app: Express) {
       // Create TOTP instance
       const totp = new TOTP({
         issuer: "ADISA",
-        label: user.username || user.email,
+        label: user.username || user.email || "User",
         algorithm: "SHA1",
         digits: 6,
         period: 30,
