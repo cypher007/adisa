@@ -15,6 +15,7 @@ import { LoginPage } from "../pages/login";
 import { RegisterPage } from "../pages/register";
 import { ForgotPasswordPage } from "../pages/forgot-password";
 import { Verify2FAPage } from "../pages/verify-2fa";
+import { DashboardPage } from "../pages/dashboard";
 
 export const AppRoutes = () => {
   return (
@@ -34,7 +35,7 @@ export const AppRoutes = () => {
           </Authenticated>
         }
       >
-        <Route index element={<NavigateToResource resource="profiles" />} />
+        <Route index element={<DashboardPage />} />
 
         {/* Profiles routes */}
         <Route path="/profiles">
