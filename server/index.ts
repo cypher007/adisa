@@ -19,11 +19,27 @@ async function main() {
   // Setup 2FA routes
   setupTwoFactorRoutes(app);
 
-  // Admin endpoint to get all users
+  // Admin routes
   app.get("/api/admin/users", isAdmin, async (req, res) => {
     try {
-      const users = await storage.getAllUsers();
-      res.json(users);
+      const { users } = await import("../shared/schema");
+      const { db } = await import("./db");
+      
+      const allUsers = await db.select().from(users);
+      
+      res.json({
+        users: allUsers.map(user => ({
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          role: user.role,
+          isActive: user.isActive,
+          twoFactorEnabled: user.twoFactorEnabled,
+          createdAt: user.createdAt,
+        })),
+      });
     } catch (error) {
       console.error("Error fetching users:", error);
       res.status(500).json({ error: "Failed to fetch users" });
@@ -35,7 +51,7 @@ async function main() {
     try {
       const user = req.user as Express.User;
       const org = await storage.getOrganizationByUserId(user.id);
-
+      
       res.json({ organization: org || null });
     } catch (error) {
       console.error("Error fetching organization:", error);
