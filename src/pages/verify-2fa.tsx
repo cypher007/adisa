@@ -56,7 +56,7 @@ export const Verify2FAPage = () => {
         alignItems: "center",
         justifyContent: "center",
         minHeight: "100vh",
-        background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+        background: "linear-gradient(135deg, #2d3436 0%, #000000 100%)",
       }}
     >
       <Card
@@ -75,7 +75,7 @@ export const Verify2FAPage = () => {
               marginBottom: 16,
             }}
           />
-          <SafetyOutlined style={{ fontSize: 48, color: "#667eea" }} />
+          <SafetyOutlined style={{ fontSize: 48, color: "#e0e0e0" }} />
           <Title level={2} style={{ marginBottom: 8, marginTop: 16 }}>
             Vérification 2FA
           </Title>

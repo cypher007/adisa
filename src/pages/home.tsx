@@ -73,8 +73,8 @@ export const HomePage = () => {
               height: 56,
               fontSize: 18,
               padding: "0 48px",
-              background: "white",
-              color: "#667eea",
+              background: "#e0e0e0",
+              color: "#1a1a1a",
               border: "none",
               fontWeight: 600,
             }}
@@ -88,7 +88,7 @@ export const HomePage = () => {
       {/* Features Section */}
       <div
         style={{
-          background: "white",
+          background: "#1a1a1a",
           padding: "80px 24px",
           marginTop: -60,
           borderRadius: "40px 40px 0 0",
@@ -102,7 +102,8 @@ export const HomePage = () => {
                 style={{
                   textAlign: "center",
                   height: "100%",
-                  boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
+                  background: "#2a2a2a",
+                  boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
                   borderRadius: 16,
                 }}
               >
@@ -111,19 +112,19 @@ export const HomePage = () => {
                     width: 80,
                     height: 80,
                     borderRadius: "50%",
-                    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                    background: "#404040",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
                     margin: "0 auto 24px",
                   }}
                 >
-                  <LockOutlined style={{ fontSize: 40, color: "white" }} />
+                  <LockOutlined style={{ fontSize: 40, color: "#e0e0e0" }} />
                 </div>
-                <Title level={3} style={{ marginBottom: 16 }}>
+                <Title level={3} style={{ marginBottom: 16, color: "#e0e0e0" }}>
                   Sécurité renforcée
                 </Title>
-                <Paragraph style={{ fontSize: 16, color: "#666" }}>
+                <Paragraph style={{ fontSize: 16, color: "#b0b0b0" }}>
                   Vos données sont chiffrées et protégées selon les meilleures
                   pratiques.
                 </Paragraph>
@@ -136,7 +137,8 @@ export const HomePage = () => {
                 style={{
                   textAlign: "center",
                   height: "100%",
-                  boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
+                  background: "#2a2a2a",
+                  boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
                   borderRadius: 16,
                 }}
               >
@@ -145,19 +147,19 @@ export const HomePage = () => {
                     width: 80,
                     height: 80,
                     borderRadius: "50%",
-                    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                    background: "#404040",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
                     margin: "0 auto 24px",
                   }}
                 >
-                  <BarChartOutlined style={{ fontSize: 40, color: "white" }} />
+                  <BarChartOutlined style={{ fontSize: 40, color: "#e0e0e0" }} />
                 </div>
-                <Title level={3} style={{ marginBottom: 16 }}>
+                <Title level={3} style={{ marginBottom: 16, color: "#e0e0e0" }}>
                   Analyse détaillée
                 </Title>
-                <Paragraph style={{ fontSize: 16, color: "#666" }}>
+                <Paragraph style={{ fontSize: 16, color: "#b0b0b0" }}>
                   Obtenez des recommandations personnalisées pour améliorer
                   votre sécurité.
                 </Paragraph>
@@ -170,7 +172,8 @@ export const HomePage = () => {
                 style={{
                   textAlign: "center",
                   height: "100%",
-                  boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
+                  background: "#2a2a2a",
+                  boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
                   borderRadius: 16,
                 }}
               >
@@ -179,19 +182,19 @@ export const HomePage = () => {
                     width: 80,
                     height: 80,
                     borderRadius: "50%",
-                    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                    background: "#404040",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
                     margin: "0 auto 24px",
                   }}
                 >
-                  <GlobalOutlined style={{ fontSize: 40, color: "white" }} />
+                  <GlobalOutlined style={{ fontSize: 40, color: "#e0e0e0" }} />
                 </div>
-                <Title level={3} style={{ marginBottom: 16 }}>
+                <Title level={3} style={{ marginBottom: 16, color: "#e0e0e0" }}>
                   Adapté à l'Afrique
                 </Title>
-                <Paragraph style={{ fontSize: 16, color: "#666" }}>
+                <Paragraph style={{ fontSize: 16, color: "#b0b0b0" }}>
                   Conçu spécifiquement pour les défis numériques des
                   organisations africaines.
                 </Paragraph>
@@ -201,13 +204,13 @@ export const HomePage = () => {
 
           {/* Additional Info Section */}
           <div style={{ marginTop: 80, textAlign: "center" }}>
-            <Title level={2} style={{ marginBottom: 24 }}>
+            <Title level={2} style={{ marginBottom: 24, color: "#e0e0e0" }}>
               Pourquoi ADISA ?
             </Title>
             <Paragraph
               style={{
                 fontSize: 18,
-                color: "#666",
+                color: "#b0b0b0",
                 maxWidth: 800,
                 margin: "0 auto 48px",
               }}
@@ -228,8 +231,10 @@ export const HomePage = () => {
                   height: 48,
                   fontSize: 16,
                   padding: "0 40px",
-                  background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                  background: "#e0e0e0",
+                  color: "#1a1a1a",
                   border: "none",
+                  fontWeight: 600,
                 }}
               >
                 Commencer maintenant

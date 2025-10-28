@@ -26,7 +26,7 @@ export const LoginPage = () => {
         alignItems: "center",
         justifyContent: "center",
         minHeight: "100vh",
-        background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+        background: "linear-gradient(135deg, #2d3436 0%, #000000 100%)",
       }}
     >
       <Card

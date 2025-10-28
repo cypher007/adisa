@@ -130,7 +130,36 @@ The project is configured for Replit deployment with:
 - Start command: `npm run start`
 - Target: Autoscale (suitable for web apps)
 
+## Design System
+
+### Interface Publique (Noir/Gris)
+- **Fond**: Dégradé gris foncé vers noir (#2d3436 → #000000)
+- **Cartes**: Fond #2a2a2a avec bordures #404040
+- **Texte principal**: Gris clair #e0e0e0
+- **Texte secondaire**: Gris moyen #b0b0b0
+- **Boutons**: Gris clair #e0e0e0 avec texte noir
+- **Logo**: Blanc (inversé) sur fond sombre
+
+### Interface Privée (Jaune/Noir/Ocre/Vert)
+- **Fond**: Noir #1a1a1a
+- **Cartes**: Fond #2a2a2a avec bordures #404040
+- **Couleur primaire**: Jaune #f0db4f
+- **Couleur verte**: #52c41a (statistiques positives)
+- **Couleur ocre**: #d4a574 (statistiques 2FA)
+- **Couleur vert olive**: #8db600 (invitations)
+- **Boutons primaires**: Jaune #f0db4f avec texte noir
+- **Boutons secondaires**: Gris #404040 avec texte clair
+- **Tags admin**: Jaune #f0db4f sur noir
+- **Tags 2FA activé**: Vert #52c41a sur noir
+
 ## Recent Changes (October 28, 2025)
+
+### 🎨 Design System Implementation
+- **Interface publique**: Palette noir/gris pour page d'accueil, connexion, 2FA
+- **Interface privée**: Palette jaune/noir/ocre/vert pour dashboard admin
+- **Logo AfricTivistes**: Intégré sur toutes les pages publiques
+- **Bouton "Créer un compte"**: Supprimé (invitation uniquement)
+- **Cohérence visuelle**: Design moderne et professionnel
 
 ### 🚀 Major System Overhaul - Invitation System
 
