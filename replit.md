@@ -14,6 +14,21 @@ This is a Refine-based admin dashboard application built with React, TypeScript,
 - **Data Backend**: Supabase
 - **Routing**: React Router
 
+## Pages Structure
+
+### Public Pages (Noir/Gris Design)
+- **`/`** - Page d'accueil publique avec logo AfricTivistes
+- **`/login`** - Connexion utilisateur standard
+- **`/admin`** - Connexion administrateur (design jaune/noir)
+- **`/verify-2fa`** - Vérification 2FA après connexion
+- **`/register`** - Inscription (via invitation uniquement)
+
+### Private Pages (Jaune/Noir/Ocre/Vert Design)
+- **`/dashboard`** - Tableau de bord admin avec statistiques
+- **`/profiles`** - Gestion des profils
+- **`/audits`** - Gestion des audits
+- **`/questions`** - Gestion des questions
+
 ## Current Status
 ✅ **Backend Complètement Implémenté**
 - ✅ Système d'invitation uniquement par email
@@ -155,11 +170,12 @@ The project is configured for Replit deployment with:
 ## Recent Changes (October 28, 2025)
 
 ### 🎨 Design System Implementation
-- **Interface publique**: Palette noir/gris pour page d'accueil, connexion, 2FA
+- **Interface publique**: Palette noir/gris pour page d'accueil, connexion standard, 2FA
+- **Page Admin** (`/admin`): Page de connexion dédiée aux admins avec design jaune/noir
 - **Interface privée**: Palette jaune/noir/ocre/vert pour dashboard admin
-- **Logo AfricTivistes**: Intégré sur toutes les pages publiques
+- **Logo AfricTivistes**: Intégré sur toutes les pages publiques et page admin
 - **Bouton "Créer un compte"**: Supprimé (invitation uniquement)
-- **Cohérence visuelle**: Design moderne et professionnel
+- **Cohérence visuelle**: Design moderne et professionnel avec distinction claire public/privé
 
 ### 🚀 Major System Overhaul - Invitation System
 

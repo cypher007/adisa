@@ -12,6 +12,7 @@ import {
 import { Outlet, Route, Routes } from "react-router";
 import { Header } from "../components/header";
 import { LoginPage } from "../pages/login";
+import { AdminLoginPage } from "../pages/admin-login";
 import { RegisterPage } from "../pages/register";
 import { ForgotPasswordPage } from "../pages/forgot-password";
 import { Verify2FAPage } from "../pages/verify-2fa";
@@ -93,6 +94,7 @@ export const AppRoutes = () => {
         }
       >
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/admin" element={<AdminLoginPage />} />
         <Route path="/verify-2fa" element={<Verify2FAPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
