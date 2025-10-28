@@ -5,7 +5,6 @@ import {
   LockOutlined,
   BarChartOutlined,
   GlobalOutlined,
-  ArrowRightOutlined,
 } from "@ant-design/icons";
 
 const { Title, Paragraph, Text } = Typography;
@@ -59,39 +58,21 @@ export const HomePage = () => {
             d'auto-évaluation sécurisé conçu pour les organisations africaines.
           </Paragraph>
 
-          <Space size="large">
-            <Button
-              size="large"
-              style={{
-                height: 56,
-                fontSize: 18,
-                padding: "0 48px",
-                background: "white",
-                color: "#667eea",
-                border: "none",
-                fontWeight: 600,
-              }}
-              onClick={() => navigate("/login")}
-            >
-              Se connecter
-            </Button>
-            <Button
-              size="large"
-              type="primary"
-              icon={<ArrowRightOutlined />}
-              style={{
-                height: 56,
-                fontSize: 18,
-                padding: "0 48px",
-                background: "rgba(255, 255, 255, 0.2)",
-                border: "2px solid white",
-                fontWeight: 600,
-              }}
-              onClick={() => navigate("/register")}
-            >
-              Créer un compte
-            </Button>
-          </Space>
+          <Button
+            size="large"
+            style={{
+              height: 56,
+              fontSize: 18,
+              padding: "0 48px",
+              background: "white",
+              color: "#667eea",
+              border: "none",
+              fontWeight: 600,
+            }}
+            onClick={() => navigate("/login")}
+          >
+            Se connecter
+          </Button>
         </div>
       </div>
 
