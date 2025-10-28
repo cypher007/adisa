@@ -1,92 +1,91 @@
+
 import { AuthBindings } from "@refinedev/core";
 
 const authProvider: AuthBindings = {
-  login: async () => {
-    window.location.href = "/api/login";
-    return {
-      success: false,
-    };
-  },
-  register: async () => {
-    window.location.href = "/api/register";
-    return {
-      success: false,
-    };
-  },
-  forgotPassword: async () => {
-    window.location.href = "/api/forgot-password";
-    return {
-      success: false,
-    };
-  },
-  logout: async () => {
-    window.location.href = "/api/logout";
-    return {
-      success: true,
-    };
-  },
-  onError: async (error) => {
-    if (error.status === 401) {
+  login: async ({ email, password }) => {
+    try {
+      const response = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: email, password }),
+      });
+
+      if (response.ok) {
+        return {
+          success: true,
+          redirectTo: "/",
+        };
+      }
+
       return {
-        logout: true,
-        redirectTo: "/api/login",
+        success: false,
+        error: {
+          name: "LoginError",
+          message: "Invalid email or password",
+        },
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: {
+          name: "LoginError",
+          message: "An error occurred during login",
+        },
       };
     }
-
-    return { error };
+  },
+  logout: async () => {
+    try {
+      await fetch("/api/logout", { method: "POST" });
+      return {
+        success: true,
+        redirectTo: "/login",
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: {
+          name: "LogoutError",
+          message: "An error occurred during logout",
+        },
+      };
+    }
   },
   check: async () => {
     try {
-      const response = await fetch("/api/auth/check", {
-        credentials: "include",
-      });
-
+      const response = await fetch("/api/me");
       if (response.ok) {
         return {
           authenticated: true,
         };
       }
-
       return {
         authenticated: false,
-        redirectTo: "/api/login",
+        redirectTo: "/login",
       };
-    } catch (err) {
+    } catch (error) {
       return {
         authenticated: false,
-        redirectTo: "/api/login",
+        redirectTo: "/login",
       };
     }
   },
   getPermissions: async () => null,
   getIdentity: async () => {
     try {
-      const response = await fetch("/api/auth/user", {
-        credentials: "include",
-      });
-
-      if (!response.ok) {
-        return null;
+      const response = await fetch("/api/me");
+      if (response.ok) {
+        const user = await response.json();
+        return user;
       }
-
-      const user = await response.json();
-
-      if (user) {
-        return {
-          id: user.id,
-          name: user.firstName && user.lastName 
-            ? `${user.firstName} ${user.lastName}` 
-            : user.email || "User",
-          email: user.email,
-          avatar: user.profileImageUrl,
-        };
-      }
-
       return null;
-    } catch (err) {
-      console.error("Unexpected error in getIdentity:", err);
+    } catch (error) {
       return null;
     }
+  },
+  onError: async (error) => {
+    console.error(error);
+    return { error };
   },
 };
 
