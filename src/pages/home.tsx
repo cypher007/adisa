@@ -33,6 +33,15 @@ export const HomePage = () => {
             margin: "0 auto",
           }}
         >
+          <img
+            src="/assets/africtivistes-logo.png"
+            alt="AfricTivistes"
+            style={{
+              height: 80,
+              marginBottom: 32,
+              filter: "brightness(0) invert(1)",
+            }}
+          />
           <Title
             level={1}
             style={{

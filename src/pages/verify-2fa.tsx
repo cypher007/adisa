@@ -67,6 +67,14 @@ export const Verify2FAPage = () => {
         }}
       >
         <div style={{ textAlign: "center", marginBottom: 24 }}>
+          <img
+            src="/assets/africtivistes-logo.png"
+            alt="AfricTivistes"
+            style={{
+              height: 40,
+              marginBottom: 16,
+            }}
+          />
           <SafetyOutlined style={{ fontSize: 48, color: "#667eea" }} />
           <Title level={2} style={{ marginBottom: 8, marginTop: 16 }}>
             Vérification 2FA

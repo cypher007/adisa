@@ -37,6 +37,14 @@ export const LoginPage = () => {
         }}
       >
         <div style={{ textAlign: "center", marginBottom: 24 }}>
+          <img
+            src="/assets/africtivistes-logo.png"
+            alt="AfricTivistes"
+            style={{
+              height: 50,
+              marginBottom: 16,
+            }}
+          />
           <Title level={2} style={{ marginBottom: 8 }}>
             ADISA
           </Title>
