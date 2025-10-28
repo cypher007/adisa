@@ -41,7 +41,10 @@ export function setupInvitationRoutes(app: Express) {
       });
 
       // Send invitation email
-      const inviteUrl = `${req.protocol}://${req.get("host")}/register?token=${token}`;
+      const baseUrl = process.env.NODE_ENV === 'production' 
+        ? 'https://adisa.africtivistes.com'
+        : `${req.protocol}://${req.get("host")}`;
+      const inviteUrl = `${baseUrl}/register?token=${token}`;
 
       await sendEmail({
         to: email,
